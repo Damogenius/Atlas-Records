@@ -1,0 +1,392 @@
+Administrator@478b9a218c5258b MINGW64 ~
+$ cd Documents
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents
+$ git init
+Initialized empty Git repository in C:/Users/Administrator/Documents/.git/
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git add Test\ 1.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   Test 1.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        My Music/
+        My Pictures/
+        My Videos/
+        Test 2.txt
+        desktop.ini
+
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git commit -m "First uplaod"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'Administrator@478b9a218c5258b.(
+none)')
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git remote add origin 'hthttps://github.com/Damogenius/Atlas-Records.git'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push -u origin main
+error: src refspec main does not match any
+error: failed to push some refs to 'https://github.com/Damogenius/Atlas-Record
+s.git'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push origin master
+error: src refspec master does not match any
+error: failed to push some refs to 'https://github.com/Damogenius/Atlas-Record
+s.git'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git config user.email "damogenius@gmail.com"
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git commit -m "First upload"
+[master (root-commit) adfc3aa] First upload
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 Test 1.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git add Test\ 2.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git commit -m "second Upload"
+[master ee7585f] second Upload
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 Test 2.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push origin main
+error: src refspec main does not match any
+error: failed to push some refs to 'https://github.com/Damogenius/Atlas-Record
+s.git'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git remote add origin "https://github.com/Damogenius/Atlas-Records.git"
+error: remote origin already exists.
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push -u origin main
+error: src refspec main does not match any
+error: failed to push some refs to 'https://github.com/Damogenius/Atlas-Record
+s.git'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git branch
+* master
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push -u origin master
+fatal: protocol 'https' is not supported
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git clone https://github.com/Damogenius/Atlas-Records.git
+Cloning into 'Atlas-Records'...
+remote: Enumerating objects: 6, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 6 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (6/6), done.
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push -u origin master
+fatal: protocol 'https' is not supported
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git branch
+* master
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git clone git@github.com:Damogenius/Atlas-Records.git
+fatal: destination path 'Atlas-Records' already exists and is not an empty direc
+tory.
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git checkout main
+error: pathspec 'main' did not match any file(s) known to git
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git checkout master
+Already on 'master'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push origin master
+fatal: protocol 'https' is not supported
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ ssh-keygen -t rsa -b 4096 -C "damogenius@gmil.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/Administrator/.ssh/id_rsa):
+Created directory '/c/Users/Administrator/.ssh'.
+Enter passphrase for "/c/Users/Administrator/.ssh/id_rsa" (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /c/Users/Administrator/.ssh/id_rsa
+Your public key has been saved in /c/Users/Administrator/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:sco4s7mo6wq1Wk32WA1H+UCwQBkdfyGW4EtKsNuEvS0 damogenius@gmil.com
+The key's randomart image is:
++---[RSA 4096]----+
+|  ..+++==o.      |
+|   =.o.=+. .     |
+|  o + = +o.      |
+|   = = = +.      |
+|  o E + S        |
+| . = B .         |
+|. o * +          |
+|.o . =           |
+|B+. +.           |
++----[SHA256]-----+
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCvJQn8PjQWRyFIX+kH4yu6srjw0CdOPZDJ35hmxu8WTmxsrQoRwPH0VD9/HlulAbM4bZqGhBKLvUQv1jRBATlD6tsSJ5CC0AlOOGP37o47xxPWdWoiqJZCEuJxBv7U+4E6kCKhq+8B9DinRV2+LBehej1FOIG/4YzEmCflV9CzJnyicZUi/z2a2n5FCtsXIPuRMtRjId1ArJ8O509JMJcWefCAhy1NVTGo/gD9wP16JFUY4/mkjl1b8InPjceNjCXNB4giF0o6+hOHQgWjEnaOg5suNrN2aJpB/7C+c6IRr2m+O0gPc4quv12Gfz3S01KJtJStSsZ3Pe1ROS8Nz5E1rz85u0d/WJmswQ17VzOnkQQDZppkmcz4+iyK/JQTP6EPm1btUe4icyD/mFE4l7kCfjBo0H/yntRCfh5aYWkggal13PxYaXShBnAPxB6gNhz9zwuUu3jrC1typ4devms7FJiYedQudfWt9l+sducEqCyHM0NIty43otLivOJku5y8ke0IqZEVGhp/5wykHjQvna7C5fGYWxNKTeYj/Ncg5Il2Rhi+3YfxB6g5gqnByClsIK/usYjDRM5Ek8kEEwVYda0wLf0U4x7BqrsbOpKIKqMVB4jun8SyhiJn8YYYKVQ5djGIq2Vrv4ADhSfle58rHWfm2ySlhsjAMah+KoUiMw== damogenius@gmil.com
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git remote set-url origin git@github.com:Damogenius/Atlas-Records.git
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ git push -u origin master
+The authenticity of host 'github.com (20.207.73.82)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (5/5), 424 bytes | 212.00 KiB/s, done.
+Total 5 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: Create a pull request for 'master' on GitHub by visiting:
+remote:      https://github.com/Damogenius/Atlas-Records/pull/new/master
+remote:
+To github.com:Damogenius/Atlas-Records.git
+ * [new branch]      master -> master
+branch 'master' set up to track 'origin/master'.
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents (master)
+$ cd /
+
+Administrator@478b9a218c5258b MINGW64 /
+$ cd D
+
+Administrator@478b9a218c5258b MINGW64 /D
+$ ls
+'$RECYCLE.BIN'/   Selenium/  'System Volume Information'/
+ ISO/             Software/  'Ubuntu VM'/
+
+Administrator@478b9a218c5258b MINGW64 /D
+$
+
+
+Administrator@478b9a218c5258b MINGW64 ~
+$ cd Documents/Atlas-Records/
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git init
+Reinitialized existing Git repository in C:/Users/Administrator/Documents/Atlas-
+Records/.git/
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git show
+commit 9d526cfc49b606d2baa7dbd1d92974aad34e2685 (HEAD -> main)
+Author: unknown <damogenius@gmail.com>
+Date:   Sat May 17 15:30:04 2025 +0530
+
+    3rd commit
+
+diff --git a/sample.txt b/sample.txt
+new file mode 100644
+index 0000000..ee6ff2f
+--- /dev/null
++++ b/sample.txt
+@@ -0,0 +1 @@
++Will delete Soon
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git log
+commit 9d526cfc49b606d2baa7dbd1d92974aad34e2685 (HEAD -> main)
+Author: unknown <damogenius@gmail.com>
+Date:   Sat May 17 15:30:04 2025 +0530
+
+    3rd commit
+
+commit ce1e6474a9dec4d639982f2ce212a9ef8318923a (tag: First_version, origin/main
+, origin/HEAD)
+Author: Damogenius <92662058+Damogenius@users.noreply.github.com>
+Date:   Sat May 17 10:57:56 2025 +0530
+
+    First Commit
+
+commit fceaa412eda4be2f37b9511b57f64672f0bbbe16 (origin/side_branch)
+Author: Damogenius <92662058+Damogenius@users.noreply.github.com>
+Date:   Sat May 17 09:57:30 2025 +0530
+
+    Initial commit
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git revert 200~9d526cfc49b606d2baa7dbd1d92974aad34e2685
+fatal: bad revision '200~9d526cfc49b606d2baa7dbd1d92974aad34e2685'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git revert 9d526cfc49b606d2baa7dbd1d92974aad34e2685
+error: your local changes would be overwritten by revert.
+hint: commit your changes or stash them to proceed.
+fatal: revert failed
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        deleted:    sample.txt
+
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git log
+commit 9d526cfc49b606d2baa7dbd1d92974aad34e2685 (HEAD -> main)
+Author: unknown <damogenius@gmail.com>
+Date:   Sat May 17 15:30:04 2025 +0530
+
+    3rd commit
+
+commit ce1e6474a9dec4d639982f2ce212a9ef8318923a (tag: First_version, origin/main
+, origin/HEAD)
+Author: Damogenius <92662058+Damogenius@users.noreply.github.com>
+Date:   Sat May 17 10:57:56 2025 +0530
+
+    First Commit
+
+commit fceaa412eda4be2f37b9511b57f64672f0bbbe16 (origin/side_branch)
+Author: Damogenius <92662058+Damogenius@users.noreply.github.com>
+Date:   Sat May 17 09:57:30 2025 +0530
+
+    Initial commit
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git restore --staged sample.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+E325: ATTENTION
+Found a swap file by the name "~/Documents/Atlas-Records/.git/.COMMIT_EDITMSG.swp"
+Revert "3rd commit"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[main 70f5d46] Revert "3rd commit"
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 sample.txt
+
+
+    Revert "3rd commit"
+
+    This reverts commit 9d526cfc49b606d2baa7dbd1d92974aad34e2685.
+
+commit 9d526cfc49b606d2baa7dbd1d92974aad34e2685
+Author: unknown <damogenius@gmail.com>
+Date:   Sat May 17 15:30:04 2025 +0530
+
+    3rd commit
+
+commit ce1e6474a9dec4d639982f2ce212a9ef8318923a (tag: First_version, origin/main, origin/HEAD)
+Author: Damogenius <92662058+Damogenius@users.noreply.github.com>
+Date:   Sat May 17 10:57:56 2025 +0530
+
+    First Commit
+
+commit fceaa412eda4be2f37b9511b57f64672f0bbbe16 (origin/side_branch)
+Author: Damogenius <92662058+Damogenius@users.noreply.github.com>
+Date:   Sat May 17 09:57:30 2025 +0530
+
+    Initial commit
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git push origin main
+info: please complete authentication in your browser...
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 498 bytes | 498.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Damogenius/Atlas-Records.git
+   ce1e647..70f5d46  main -> main
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$
