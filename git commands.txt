@@ -390,3 +390,85 @@ To https://github.com/Damogenius/Atlas-Records.git
 
 Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
 $
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git add git\ commands.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git commit -m "Transferring"
+[main 7514f5d] Transferring
+ 1 file changed, 392 insertions(+)
+ create mode 100644 git commands.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git push origin main
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 3.57 KiB | 3.57 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Damogenius/Atlas-Records.git
+   70f5d46..7514f5d  main -> main
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git branch New_branch
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git branch
+  New_branch
+* main
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git checkout New_branch
+Switched to branch 'New_branch'
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (New_branch)
+$ cat <merge.txt
+bash: merge.txt: No such file or directory
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (New_branch)
+$ cat > merge.txt
+Merging this into Main branch
+
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (New_branch)
+$ git add merge.txt
+warning: in the working copy of 'merge.txt', LF will be replaced by CRLF the next time Git touches it
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (New_branch)
+$ git commit -m "merging"
+[New_branch aa57774] merging
+ 1 file changed, 1 insertion(+)
+ create mode 100644 merge.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (New_branch)
+$ git push origin New_branch
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 292 bytes | 292.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+remote:
+remote: Create a pull request for 'New_branch' on GitHub by visiting:
+remote:      https://github.com/Damogenius/Atlas-Records/pull/new/New_branch
+remote:
+To https://github.com/Damogenius/Atlas-Records.git
+ * [new branch]      New_branch -> New_branch
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (New_branch)
+$ git checkout main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$ git merge New_branch
+Updating 7514f5d..aa57774
+Fast-forward
+ merge.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 merge.txt
+
+Administrator@478b9a218c5258b MINGW64 ~/Documents/Atlas-Records (main)
+$
