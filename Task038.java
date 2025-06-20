@@ -36,7 +36,8 @@ abstract class Employee {
         return name + " " + address + " " + number;
     }
 
-    // Getters and Setters
+    // Getters and
+
     public String getName() {
         return name;
     }
