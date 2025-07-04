@@ -78,7 +78,7 @@ class Node2 {
             }
         }
 
-public class Task09{
+public class Task10{
     public static void main(String[] args) {
         CustomQueue queue = new CustomQueue();
 
