@@ -14,7 +14,7 @@ class Node {
 public class Demo_LinkedList {
     Node head;
 
-    // Method to insert node at the end
+
     public void insert(int data) {
         Node newNode = new Node(data);
 
