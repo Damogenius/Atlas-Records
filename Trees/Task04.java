@@ -39,9 +39,14 @@ class BinarySearchTree{
     public void inorder(Node node) {
         //System.out.println("Inorder Traversal:");
         if (node != null) {
+            System.out.println("Visiting left child of " + node.data);
             inorder(node.left);
-            System.out.print(node.data + " ");
+            System.out.println("Visiting node: " + node.data);
             inorder(node.right);
+//        if (node != null) {
+//            inorder(node.left);
+//            System.out.print(node.data + " ");
+//            inorder(node.right);
         }
     }
 }
