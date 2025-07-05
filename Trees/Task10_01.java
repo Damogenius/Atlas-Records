@@ -28,7 +28,7 @@ class GraphNode {
 
          if (srcNode != null && destNode != null) {
              srcNode.neighbors.add(destNode);
-             destNode.neighbors.add(srcNode);  // Undirected graph
+             destNode.neighbors.add(srcNode);
          }
      }
 
