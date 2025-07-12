@@ -123,15 +123,17 @@ class AVLTree {
     public static void main(String[] args) {
         AVLTree tree = new AVLTree();
 
+        int[] valuesToInsert = {10, 20, 30, 15, 25, 5};
 
-        tree.insert(10);
-        tree.insert(20);
-        tree.insert(30);
-        tree.insert(15);
-        tree.insert(25);
-        tree.insert(5);
+        for (int value : valuesToInsert) {
+            System.out.println("Inserting: " + value);
+            tree.insert(value);
+            System.out.println("Tree after insertion of " + value + ":");
+            tree.preOrder();
+            System.out.println("\n---");
+        }
 
-        System.out.println("Preorder traversal of the AVL tree:");
+        System.out.println("Final Preorder Traversal of the AVL Tree:");
         tree.preOrder();
     }
-}
+    }
