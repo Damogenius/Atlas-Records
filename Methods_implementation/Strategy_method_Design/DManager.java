@@ -5,9 +5,7 @@ import java.util.List;
 
 public class DManager {
 
-
     private static DManager instance;
-
 
     private final List<String> itemList;
 
@@ -38,6 +36,6 @@ public class DManager {
 
 
     public synchronized List<String> list() {
-        return new ArrayList<>(itemList); // return a copy for safety
+        return new ArrayList<>(itemList);
     }
 }
