@@ -14,13 +14,13 @@ public class Create_Table {
                 .build();
 
         CreateTableRequest request = CreateTableRequest.builder()
-                .tableName("Users")
+                .tableName("DemoTable")
                 .keySchema(KeySchemaElement.builder()
-                        .attributeName("UserId")
+                        .attributeName("DemoId")
                         .keyType(KeyType.HASH) // Partition key
                         .build())
                 .attributeDefinitions(AttributeDefinition.builder()
-                        .attributeName("UserId")
+                        .attributeName("DemoId")
                         .attributeType(ScalarAttributeType.S)
                         .build())
                 .provisionedThroughput(ProvisionedThroughput.builder()
