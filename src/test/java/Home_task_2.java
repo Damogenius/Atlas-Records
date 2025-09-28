@@ -1,7 +1,7 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class Home_task_1 {
+public class Home_task_2 {
 
     @Test
     public void testCompareWhenFirstIsGreater() {
