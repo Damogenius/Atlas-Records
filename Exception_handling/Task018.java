@@ -26,13 +26,10 @@ public class Task018 {
             }
 
         });
-
         //traversing with Consumer interface implementation
         MyConsumer action = new MyConsumer();
         myList.forEach(action);
-
     }
-
 }
 
 //Consumer implementation that can be reused

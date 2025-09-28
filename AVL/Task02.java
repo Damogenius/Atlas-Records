@@ -32,38 +32,24 @@ class AVLTree {
     Node rightRotate(Node y) {
         Node x = y.left;
         Node T2 = x.right;
-
-
         x.right = y;
         y.left = T2;
-
-
         y.height = Math.max(height(y.left), height(y.right)) + 1;
         x.height = Math.max(height(x.left), height(x.right)) + 1;
-
-
         return x;
     }
-
 
     Node leftRotate(Node x) {
         Node y = x.right;
         Node T2 = y.left;
-
-
         y.left = x;
         x.right = T2;
-
-
         x.height = Math.max(height(x.left), height(x.right)) + 1;
         y.height = Math.max(height(y.left), height(y.right)) + 1;
 
-
         return y;
     }
-
     Node insert(Node node, int key) {
-
         if (node == null)
             return new Node(key);
 
@@ -74,10 +60,7 @@ class AVLTree {
         else
             return node;
 
-
         node.height = 1 + Math.max(height(node.left), height(node.right));
-
-
         int balance = getBalance(node);
 
 
@@ -118,13 +101,9 @@ class AVLTree {
     }
 }
     class Task02{
-
-
     public static void main(String[] args) {
         AVLTree tree = new AVLTree();
-
         int[] valuesToInsert = {10, 20, 30, 15, 25, 5};
-
         for (int value : valuesToInsert) {
             System.out.println("Inserting: " + value);
             tree.insert(value);

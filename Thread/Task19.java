@@ -7,7 +7,6 @@ class MyRunnable implements Runnable {
     }
 }
 
-
 class MyThread extends Thread {
     @Override
     public void run() {
@@ -16,14 +15,10 @@ class MyThread extends Thread {
 }
 class Task19 {
     public static void main(String[] args) {
-
         MyRunnable runnableInstance = new MyRunnable();
         MyThread threadInstance = new MyThread();
-
         Thread t1 = new Thread(runnableInstance);
-
         t1.start(); // For MyRunnable
         threadInstance.start(); // For MyThread
-
     }
 }

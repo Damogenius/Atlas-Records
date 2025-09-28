@@ -48,7 +48,6 @@ public class Task21 {
         cll.insert(30);
         cll.insert(40);
         cll.insert(50);
-
         cll.display();
     }
 }
