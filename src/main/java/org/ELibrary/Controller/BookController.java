@@ -113,10 +113,14 @@ public class BookController {
             System.out.print("Enter book id: ");
             String id = scanner.nextLine();
             selectedBook = bookService.getBookById(id);
+            if(selectedBook==null) {
+                System.out.printf("\n BookID %s Does not exist", id);
+                return;
+            }
 
         } else if ("2".equals(choice)) {
             // Partial search by title
-            System.out.print("Enter book title (partial allowed): ");
+            System.out.print("Enter book title (partial allowed in proper case): ");
             String title = scanner.nextLine();
             List<Book> matches = bookService.getBooksByTitle(title);
 

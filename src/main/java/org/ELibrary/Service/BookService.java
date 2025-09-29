@@ -35,11 +35,11 @@ public class BookService {
     public void addBook(Book book) {
         if (useDynamo) {
             Map<String, AttributeValue> item = new HashMap<>();
-            item.put("id", AttributeValue.builder().s(book.getId()).build());
-            item.put("title", AttributeValue.builder().s(book.getTitle()).build());
-            item.put("author", AttributeValue.builder().s(book.getAuthor()).build());
-            item.put("issued", AttributeValue.builder().bool(book.isIssued()).build());
-            item.put("price", AttributeValue.builder().n(String.valueOf(book.getPrice())).build());
+            item.put("BookID", AttributeValue.builder().s(book.getId()).build());
+            item.put("Title", AttributeValue.builder().s(book.getTitle()).build());
+            item.put("Author", AttributeValue.builder().s(book.getAuthor()).build());
+            item.put("Issued", AttributeValue.builder().bool(book.isIssued()).build());
+            item.put("Price", AttributeValue.builder().n(String.valueOf(book.getPrice())).build());
             dynamoDb.putItem(PutItemRequest.builder().tableName(TABLE_NAME).item(item).build());
         } else {
             if (inMemory.containsKey(book.getId()))
@@ -65,7 +65,7 @@ public class BookService {
         if (useDynamo) {
             GetItemResponse resp = dynamoDb.getItem(GetItemRequest.builder()
                     .tableName(TABLE_NAME)
-                    .key(Map.of("id", AttributeValue.builder().s(id).build()))
+                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
                     .build());
             return resp.hasItem() ? mapToBook(resp.item()) : null;
         } else {
@@ -78,7 +78,7 @@ public class BookService {
         if (useDynamo) {
             ScanRequest req = ScanRequest.builder()
                     .tableName(TABLE_NAME)
-                    .filterExpression("contains(title, :t)")
+                    .filterExpression("contains(Title, :t)")
                     .expressionAttributeValues(Map.of(":t", AttributeValue.builder().s(titlePart).build()))
                     .build();
 
@@ -104,7 +104,7 @@ public class BookService {
         if (useDynamo) {
             ScanRequest req = ScanRequest.builder()
                     .tableName(TABLE_NAME)
-                    .filterExpression("contains(author, :a)")
+                    .filterExpression("contains(Author, :a)")
                     .expressionAttributeValues(Map.of(":a", AttributeValue.builder().s(authorPart).build()))
                     .build();
 
@@ -134,8 +134,8 @@ public class BookService {
         if (useDynamo) {
             dynamoDb.updateItem(UpdateItemRequest.builder()
                     .tableName(TABLE_NAME)
-                    .key(Map.of("id", AttributeValue.builder().s(id).build()))
-                    .updateExpression("SET issued = :val")
+                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
+                    .updateExpression("SET Issued = :val")
                     .expressionAttributeValues(Map.of(":val", AttributeValue.builder().bool(true).build()))
                     .build());
         } else {
@@ -151,8 +151,8 @@ public class BookService {
         if (useDynamo) {
             dynamoDb.updateItem(UpdateItemRequest.builder()
                     .tableName(TABLE_NAME)
-                    .key(Map.of("id", AttributeValue.builder().s(id).build()))
-                    .updateExpression("SET issued = :val")
+                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
+                    .updateExpression("SET Issued = :val")
                     .expressionAttributeValues(Map.of(":val", AttributeValue.builder().bool(false).build()))
                     .build());
         } else {
@@ -166,7 +166,7 @@ public class BookService {
         if (useDynamo) {
             dynamoDb.deleteItem(DeleteItemRequest.builder()
                     .tableName(TABLE_NAME)
-                    .key(Map.of("id", AttributeValue.builder().s(id).build()))
+                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
                     .build());
         } else {
             inMemory.remove(id);
@@ -175,11 +175,11 @@ public class BookService {
 
     // Map DynamoDB item to Book object
     private Book mapToBook(Map<String, AttributeValue> item) {
-        String id = item.containsKey("id") ? item.get("id").s() : null;
-        String title = item.containsKey("title") ? item.get("title").s() : null;
-        String author = item.containsKey("author") ? item.get("author").s() : null;
-        boolean issued = item.containsKey("issued") && item.get("issued").bool();
-        double price = item.containsKey("price") ? Double.parseDouble(item.get("price").n()) : 0.0;
+        String id = item.containsKey("BookID") ? item.get("BookID").s() : null;
+        String title = item.containsKey("Title") ? item.get("Title").s() : null;
+        String author = item.containsKey("Author") ? item.get("Author").s() : null;
+        boolean issued = item.containsKey("Issued") && item.get("Issued").bool();
+        double price = item.containsKey("Price") ? Double.parseDouble(item.get("Price").n()) : 0.0;
         return new Book(id, title, author, price, issued);
 
     }

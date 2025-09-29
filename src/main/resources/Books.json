@@ -1,0 +1,37 @@
+{
+  "Books": [
+    {
+      "PutRequest": {
+        "Item": {
+          "BookID": { "S": "1" },
+          "Title": { "S": "Clean Code" },
+          "Author": { "S": "Robert C. Martin" },
+          "Price": { "N": "450" },
+          "Issued": { "BOOL": false }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "BookID": { "S": "2" },
+          "Title": { "S": "Effective Java" },
+          "Author": { "S": "Joshua Bloch" },
+          "Price": { "N": "550" },
+          "Issued": { "BOOL": false }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "BookID": { "S": "3" },
+          "Title": { "S": "Design Patterns" },
+          "Author": { "S": "Erich Gamma" },
+          "Price": { "N": "600" },
+          "Issued": { "BOOL": false }
+        }
+      }
+    }
+  ]
+}
