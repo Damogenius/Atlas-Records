@@ -1,7 +1,5 @@
 package org.ELibrary.Model;
 
-import java.util.Objects;
-
 public class Book {
     private String id;
     private String title;
@@ -27,8 +25,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return String.format("[%s] %s by %s - $%.2f (%s)",
-                id, title, author, price, issued ? "Issued" : "Available");
+        return String.format("[%s] %s by %s ($%.2f)%s",
+                id, title, author, price, issued ? " [Issued]" : "");
     }
 }
-

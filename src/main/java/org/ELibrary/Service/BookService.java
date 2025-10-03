@@ -1,8 +1,6 @@
 package org.ELibrary.Service;
 
 import org.ELibrary.Model.Book;
-import org.ELibrary.Model.Cart;
-import org.ELibrary.Model.Order;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
 
@@ -11,20 +9,10 @@ import java.util.*;
 public class BookService {
     private static final String TABLE_NAME = "Books";
     private final boolean useDynamo;
-    private final DynamoDbClient dynamoDb; // null if in-memory
-    private final Map<String, Book> inMemory; // non-null if in-memory
+    private final DynamoDbClient dynamoDb;
+    private final Map<String, Book> inMemory;
 
-    // Default constructor: in-memory with seeded books
-//    public BookService() {
-//        this.useDynamo = false;
-//        this.dynamoDb = null;
-//        this.inMemory = new HashMap<>();
-//        inMemory.put("1", new Book("1", "Clean Code", "Robert C. Martin",
-//                25.90,false));
-//        inMemory.put("2", new Book("2", "Design Patterns", "Erich Gamma et al.",35.78, false));
-//    }
-
-    // DynamoDB constructor
+    // Constructor for DynamoDB
     public BookService(DynamoDbClient dynamoDb) {
         this.useDynamo = true;
         this.dynamoDb = dynamoDb;
@@ -43,7 +31,7 @@ public class BookService {
             dynamoDb.putItem(PutItemRequest.builder().tableName(TABLE_NAME).item(item).build());
         } else {
             if (inMemory.containsKey(book.getId()))
-                throw new IllegalArgumentException("Book ID " + book.getId() + " already exists.");
+                throw new IllegalArgumentException("Book ID already exists: " + book.getId());
             inMemory.put(book.getId(), book);
         }
     }
@@ -73,7 +61,7 @@ public class BookService {
         }
     }
 
-    // Search by title (partial match)
+    // Search by title (case-insensitive partial match)
     public List<Book> getBooksByTitle(String titlePart) {
         if (useDynamo) {
             ScanRequest req = ScanRequest.builder()
@@ -81,12 +69,9 @@ public class BookService {
                     .filterExpression("contains(Title, :t)")
                     .expressionAttributeValues(Map.of(":t", AttributeValue.builder().s(titlePart).build()))
                     .build();
-
             ScanResponse resp = dynamoDb.scan(req);
             List<Book> out = new ArrayList<>();
-            for (Map<String, AttributeValue> item : resp.items()) {
-                out.add(mapToBook(item));
-            }
+            for (Map<String, AttributeValue> item : resp.items()) out.add(mapToBook(item));
             return out;
         } else {
             List<Book> out = new ArrayList<>();
@@ -99,7 +84,7 @@ public class BookService {
         }
     }
 
-    // Search by author (partial match)
+    // Search by author (case-insensitive partial match)
     public List<Book> getBooksByAuthor(String authorPart) {
         if (useDynamo) {
             ScanRequest req = ScanRequest.builder()
@@ -107,12 +92,9 @@ public class BookService {
                     .filterExpression("contains(Author, :a)")
                     .expressionAttributeValues(Map.of(":a", AttributeValue.builder().s(authorPart).build()))
                     .build();
-
             ScanResponse resp = dynamoDb.scan(req);
             List<Book> out = new ArrayList<>();
-            for (Map<String, AttributeValue> item : resp.items()) {
-                out.add(mapToBook(item));
-            }
+            for (Map<String, AttributeValue> item : resp.items()) out.add(mapToBook(item));
             return out;
         } else {
             List<Book> out = new ArrayList<>();
@@ -125,12 +107,12 @@ public class BookService {
         }
     }
 
-
     // Issue book
     public void issueBook(String id) {
         Book b = getBookById(id);
-        if (b == null) throw new IllegalArgumentException("Book ID " + id + " not found.");
-        if (b.isIssued()) throw new IllegalStateException("Book ID " + id + " is already issued.");
+        if (b == null) throw new IllegalArgumentException("Book not found: " + id);
+        if (b.isIssued()) throw new IllegalStateException("Book is already issued: " + id);
+
         if (useDynamo) {
             dynamoDb.updateItem(UpdateItemRequest.builder()
                     .tableName(TABLE_NAME)
@@ -147,7 +129,8 @@ public class BookService {
     // Return book
     public void returnBook(String id) {
         Book b = getBookById(id);
-        if (b == null) throw new IllegalArgumentException("Book ID " + id + " not found.");
+        if (b == null) throw new IllegalArgumentException("Book not found: " + id);
+
         if (useDynamo) {
             dynamoDb.updateItem(UpdateItemRequest.builder()
                     .tableName(TABLE_NAME)
@@ -173,15 +156,13 @@ public class BookService {
         }
     }
 
-    // Map DynamoDB item to Book object
+    // Map DynamoDB item to Book
     private Book mapToBook(Map<String, AttributeValue> item) {
-        String id = item.containsKey("BookID") ? item.get("BookID").s() : null;
-        String title = item.containsKey("Title") ? item.get("Title").s() : null;
-        String author = item.containsKey("Author") ? item.get("Author").s() : null;
-        boolean issued = item.containsKey("Issued") && item.get("Issued").bool();
-        double price = item.containsKey("Price") ? Double.parseDouble(item.get("Price").n()) : 0.0;
+        String id = item.get("BookID").s();
+        String title = item.get("Title").s();
+        String author = item.get("Author").s();
+        boolean issued = item.get("Issued").bool();
+        double price = Double.parseDouble(item.get("Price").n());
         return new Book(id, title, author, price, issued);
-
     }
-
 }

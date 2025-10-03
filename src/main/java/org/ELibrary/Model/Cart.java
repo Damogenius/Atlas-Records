@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cart {
-    private Map<Book, Integer> items = new HashMap<>();
+    private final Map<Book, Integer> items = new HashMap<>();
 
     public void addBook(Book book, int quantity) {
         items.put(book, items.getOrDefault(book, 0) + quantity);
@@ -14,12 +14,13 @@ public class Cart {
         items.remove(book);
     }
 
-
+    public Map<Book, Integer> getItems() {
+        return items;
+    }
 
     public boolean isEmpty() {
         return items.isEmpty();
     }
-
 
     public double calculateTotal() {
         return items.entrySet().stream()
@@ -27,9 +28,7 @@ public class Cart {
                 .sum();
     }
 
-    public Map<Book, Integer> getItems() {
-        return items;
+    public void clearCart() {
+        items.clear();
     }
 }
-
-

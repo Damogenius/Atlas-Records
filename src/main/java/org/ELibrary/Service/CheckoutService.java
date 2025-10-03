@@ -2,10 +2,8 @@ package org.ELibrary.Service;
 
 import org.ELibrary.Model.Cart;
 import org.ELibrary.Model.Order;
-
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
+import org.ELibrary.Model.User;
+import org.ELibrary.Model.Book;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
@@ -14,56 +12,46 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class CheckoutService {
-
     private final DynamoDbClient dynamoDb;
-    private final String tableName = "Orders"; // DynamoDB table for orders
+    private final String tableName = "Orders";
 
-    public CheckoutService() {
-        this.dynamoDb = DynamoDbClient.builder()
-                .region(Region.AP_SOUTH_1) // dummy region for localhost
-                .endpointOverride(URI.create("http://localhost:8000")) // Local DynamoDB
-                .build();
+    public CheckoutService(DynamoDbClient dynamoDb) {
+        this.dynamoDb = dynamoDb;
     }
+    public Order checkout(User user) {
+        Cart cart = user.getCart();
+        if (cart.isEmpty()) {
+            System.out.println("Cart is empty. Add books before checkout.");
+            return null;
+        }
 
-    public Order checkout(Cart cart) {
-        // Generate Order
-        String orderId = UUID.randomUUID().toString();
         double total = cart.calculateTotal();
+        Order order = new Order(user.getUsername(), cart.getItems(), total, LocalDateTime.now());
 
-        Order order = new Order(orderId, cart.getItems(), total, LocalDateTime.now());
-
-        // Insert into DynamoDB
         persistOrder(order);
+        user.addOrder(order);
+        cart.clearCart();
 
-        System.out.println("Order placed successfully: " + orderId);
-        System.out.println("Total amount: $" + total);
-
+        System.out.println("Order placed successfully: " + order.getOrderId());
         return order;
     }
 
     private void persistOrder(Order order) {
         Map<String, AttributeValue> item = new HashMap<>();
         item.put("orderId", AttributeValue.builder().s(order.getOrderId()).build());
+        item.put("userId", AttributeValue.builder().s(order.getUserId()).build());
         item.put("totalAmount", AttributeValue.builder().n(String.valueOf(order.getTotalAmount())).build());
         item.put("createdAt", AttributeValue.builder().s(order.getCreatedAt().toString()).build());
 
-        // Flatten cart items into string (simple version)
-        StringBuilder itemsString = new StringBuilder();
-        order.getItems().forEach((book, qty) -> {
-            itemsString.append(book.getTitle())
-                    .append(" (x").append(qty).append("), ");
-        });
-        item.put("items", AttributeValue.builder().s(itemsString.toString()).build());
+        // Store items as a map of bookId -> quantity
+        Map<String, AttributeValue> itemMap = new HashMap<>();
+        for (Map.Entry<Book, Integer> entry : order.getItems().entrySet()) {
+            itemMap.put(entry.getKey().getId(), AttributeValue.builder().n(entry.getValue().toString()).build());
+        }
+        item.put("items", AttributeValue.builder().m(itemMap).build());
 
-        PutItemRequest request = PutItemRequest.builder()
-                .tableName(tableName)
-                .item(item)
-                .build();
-
-        dynamoDb.putItem(request);
+        dynamoDb.putItem(PutItemRequest.builder().tableName(tableName).item(item).build());
     }
 }
-
