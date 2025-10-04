@@ -12,14 +12,12 @@ public class BookService {
     private final DynamoDbClient dynamoDb;
     private final Map<String, Book> inMemory;
 
-    // Constructor for DynamoDB
     public BookService(DynamoDbClient dynamoDb) {
         this.useDynamo = true;
         this.dynamoDb = dynamoDb;
         this.inMemory = null;
     }
 
-    // Add book
     public void addBook(Book book) {
         if (useDynamo) {
             Map<String, AttributeValue> item = new HashMap<>();
@@ -36,7 +34,6 @@ public class BookService {
         }
     }
 
-    // Get all books
     public List<Book> getAllBooks() {
         if (useDynamo) {
             ScanResponse resp = dynamoDb.scan(ScanRequest.builder().tableName(TABLE_NAME).build());
@@ -48,7 +45,6 @@ public class BookService {
         }
     }
 
-    // Get book by ID
     public Book getBookById(String id) {
         if (useDynamo) {
             GetItemResponse resp = dynamoDb.getItem(GetItemRequest.builder()
@@ -61,7 +57,7 @@ public class BookService {
         }
     }
 
-    // Search by title (case-insensitive partial match)
+    // Search by title (case-sensitive partial match)
     public List<Book> getBooksByTitle(String titlePart) {
         if (useDynamo) {
             ScanRequest req = ScanRequest.builder()
@@ -84,7 +80,7 @@ public class BookService {
         }
     }
 
-    // Search by author (case-insensitive partial match)
+    // Search by author (case-sensitive partial match)
     public List<Book> getBooksByAuthor(String authorPart) {
         if (useDynamo) {
             ScanRequest req = ScanRequest.builder()
@@ -107,7 +103,6 @@ public class BookService {
         }
     }
 
-    // Issue book
     public void issueBook(String id) {
         Book b = getBookById(id);
         if (b == null) throw new IllegalArgumentException("Book not found: " + id);
@@ -126,7 +121,6 @@ public class BookService {
         }
     }
 
-    // Return book
     public void returnBook(String id) {
         Book b = getBookById(id);
         if (b == null) throw new IllegalArgumentException("Book not found: " + id);

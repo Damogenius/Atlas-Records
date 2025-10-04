@@ -16,7 +16,7 @@ public class UserService {
         this.dynamoDb = dynamoDb;
     }
 
-    // Save user
+
     public void saveUser(User user) {
         Map<String, AttributeValue> item = new HashMap<>();
         item.put("username", AttributeValue.builder().s(user.getUsername()).build());
@@ -32,7 +32,6 @@ public class UserService {
                 .build());
     }
 
-    // Fetch user by username
     public User getUser(String username) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("username", AttributeValue.builder().s(username).build());

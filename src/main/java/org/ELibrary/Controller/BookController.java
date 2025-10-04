@@ -8,9 +8,11 @@ import org.ELibrary.Service.BookService;
 import org.ELibrary.Service.CheckoutService;
 import org.ELibrary.Service.UserService;
 import org.ELibrary.Service.RecommendationService;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import org.ELibrary.Service.BrowsingHistoryService;
 
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import java.net.URI;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BookController {
@@ -19,118 +21,73 @@ public class BookController {
     private final CheckoutService checkoutService;
     private final UserService userService;
     private final RecommendationService recommendationService;
+    private final BrowsingHistoryService browsingHistoryService;
     private final Scanner scanner;
     private final Map<String, User> users = new HashMap<>();
     private User currentUser;
 
-    public BookController(BookService bookService, CheckoutService checkoutService,RecommendationService recommendationService) {
+    public BookController(BookService bookService, CheckoutService checkoutService,
+                          RecommendationService recommendationService,UserService userService,BrowsingHistoryService browsingHistoryService) {
         this.bookService = bookService;
         this.checkoutService = checkoutService;
         this.recommendationService = recommendationService;
-
+        this.userService=userService;
+        this.browsingHistoryService = browsingHistoryService;
         this.scanner = new Scanner(System.in);
 
-        // DynamoDB client for UserService
-        DynamoDbClient dynamoDb = DynamoDbClient.builder()
-                .region(software.amazon.awssdk.regions.Region.AP_SOUTH_1)
-                .endpointOverride(URI.create("http://localhost:8000"))
-                .build();
-
-        this.userService = new UserService(dynamoDb);
     }
 
     public void start() {
         while (true) {
             if (currentUser == null) {
-                System.out.println("\n==== User Menu ====");
-                System.out.println("1. Register User");
-                System.out.println("2. Login User");
-                System.out.println("3. Exit");
-                System.out.print("Enter choice: ");
-
-                String choice = scanner.nextLine();
-                switch (choice) {
-                    case "1" -> registerUser();
-                    case "2" -> loginUser();
-                    case "3" -> {
-                        System.out.println("Exiting Bookstore. Goodbye!");
-                        return;
-                    }
-                    default -> System.out.println("Invalid choice. Try again.");
-                }
+                showUserMenu();
             } else {
-                System.out.println("\n==== Online Bookstore ====");
-                System.out.println("Logged in as: " + currentUser.getUsername());
-                System.out.println("1. View all books");
-                System.out.println("2. Add new book");
-                System.out.println("3. Issue book");
-                System.out.println("4. Return book");
-                System.out.println("5. Add existing book to cart");
-                System.out.println("6. View cart");
-                System.out.println("7. Checkout");
-                System.out.println("8. Remove book from cart");
-                System.out.println("9. View my orders");
-                System.out.println("10. Switch user");
-                System.out.println("11. Recommended Books");
-                System.out.println("12. Logout");
-                System.out.println("13. Exit");
-                System.out.print("Enter choice: ");
-
-                String choice = scanner.nextLine();
-                switch (choice) {
-                    case "1" -> viewAllBooks();
-                    case "2" -> addNewBook();
-                    case "3" -> issueBook();
-                    case "4" -> returnBook();
-                    case "5" -> addExistingBookToCart();
-                    case "6" -> viewCart();
-                    case "7" -> checkout();
-                    case "8" -> removeFromCart();
-                    case "9" -> viewOrders();
-                    case "10" -> loginUser();
-                    case "11" ->  viewRecommendations();
-                    case "12" -> // re-login as another user//
-                        {
-                        currentUser = null;
-                        System.out.println("Logged out.");
-                    }
-                    case "13" -> {
-                        System.out.println("Exiting Bookstore. Goodbye!");
-                        return;
-                    }
-                    default -> System.out.println("Invalid choice. Try again.");
-                }
+                showBookstoreMenu();
             }
         }
     }
 
-    // ---------------- USER MANAGEMENT ----------------
+    // ---------------- USER MENU ----------------
+    private void showUserMenu() {
+        System.out.println("\n==== User Menu ====");
+        System.out.println("1. Register User");
+        System.out.println("2. Login User");
+        System.out.println("3. Exit");
+        System.out.print("Enter choice: ");
+
+        String choice = scanner.nextLine();
+        switch (choice) {
+            case "1" -> registerUser();
+            case "2" -> loginUser();
+            case "3" -> {
+                System.out.println("Exiting Bookstore. Goodbye!");
+                System.exit(0);
+            }
+            default -> System.out.println("Invalid choice. Try again.");
+        }
+    }
 
     private void registerUser() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine().trim();
-
         System.out.print("Enter email: ");
         String email = scanner.nextLine().trim();
-
         System.out.print("Enter full name: ");
         String fullName = scanner.nextLine().trim();
-
         System.out.print("Enter password: ");
         String password = scanner.nextLine().trim();
 
         User user = new User(username, email, password, fullName);
         userService.saveUser(user);
         users.put(username, user);
-
         System.out.println("User registered successfully!");
     }
 
     private void loginUser() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine().trim();
-
         User user = userService.getUser(username);
+
         if (user == null) {
             System.out.println("User not found. Please register first.");
             return;
@@ -142,14 +99,65 @@ public class BookController {
         if (password.equals(user.getPasswordHash())) {
             currentUser = user;
             users.put(username, user);
+            List<Book> history = browsingHistoryService.getBrowsingHistory(username, bookService);
+            currentUser.setBrowsingHistory(history);
             System.out.println("Login successful. Welcome, " + user.getFullName());
         } else {
             System.out.println("Invalid password.");
         }
     }
 
-    // ---------------- BOOK + CART LOGIC (unchanged from your version) ----------------
+    // ---------------- BOOKSTORE MENU ----------------
+    private void showBookstoreMenu() {
+        System.out.println("\n==== Online Bookstore ====");
+        System.out.println("Logged in as: " + currentUser.getUsername());
+        System.out.println("1. View all books");
+        System.out.println("2. Add new book");
+        System.out.println("3. Issue book");
+        System.out.println("4. Return book");
+        System.out.println("5. Add existing book to cart");
+        System.out.println("6. View cart");
+        System.out.println("7. Checkout");
+        System.out.println("8. Remove book from cart");
+        System.out.println("9. View my orders");
+        System.out.println("10. Recommended Books");
+        System.out.println("11. View Recently Browsed Books");
+        System.out.println("12. Logout");
+        System.out.println("13. View Account Info");
+        System.out.println("14. Exit");
+        System.out.print("Enter choice: ");
 
+        String choice = scanner.nextLine();
+        switch (choice) {
+            case "1" -> viewAllBooks();
+            case "2" -> addNewBook();
+            case "3" -> issueBook();
+            case "4" -> returnBook();
+            case "5" -> addExistingBookToCart();
+            case "6" -> viewCart();
+            case "7" -> checkout();
+            case "8" -> removeFromCart();
+            case "9" -> viewOrders();
+            case "10" -> viewRecommendations();
+            case "11" -> viewBrowsingHistory();
+            case "12" -> logoutUser();
+            case "13" -> viewAccountInfo();
+            case "14" -> {
+                System.out.println("Exiting Bookstore. Goodbye!");
+                System.exit(0);
+            }
+            default -> System.out.println("Invalid choice. Try again.");
+        }
+    }
+
+    private void logoutUser() {
+        // Persist browsing history to DynamoDB
+        browsingHistoryService.saveBrowsingHistory(currentUser.getUsername(), currentUser.getBrowsingHistory());
+        currentUser = null;
+        System.out.println("Logged out successfully.");
+    }
+
+    // ---------------- BOOK & CART ----------------
     private void viewAllBooks() {
         List<Book> books = bookService.getAllBooks();
         if (books.isEmpty()) {
@@ -243,6 +251,7 @@ public class BookController {
                     return;
                 }
                 currentUser.getCart().addBook(selectedBook, qty);
+                currentUser.addToBrowsingHistory(selectedBook);
                 System.out.println(selectedBook.getTitle() + " added to cart.");
             }
         } catch (NumberFormatException e) {
@@ -269,7 +278,9 @@ public class BookController {
             System.out.println("Invalid choice.");
             return null;
         }
-        return matches.get(idx);
+        Book chosen = matches.get(idx);
+        currentUser.addToBrowsingHistory(chosen);
+        return chosen;
     }
 
     private void viewCart() {
@@ -331,6 +342,7 @@ public class BookController {
             System.out.println("Checkout cancelled.");
         }
     }
+
     private void viewRecommendations() {
         List<Book> recBooks = recommendationService.getRecommendations(currentUser.getUsername(), bookService);
         if (recBooks.isEmpty()) {
@@ -343,7 +355,6 @@ public class BookController {
         recBooks.forEach(b -> System.out.printf("%-5s %-25s %-20s $%-9.2f %-10s%n",
                 b.getId(), b.getTitle(), b.getAuthor(), b.getPrice(), b.isIssued() ? "Issued" : "Available"));
     }
-
 
     private void viewOrders() {
         List<Order> orders = currentUser.getOrders();
@@ -359,4 +370,25 @@ public class BookController {
                     );
                 });
     }
+
+    private void viewBrowsingHistory() {
+        List<Book> history = currentUser.getBrowsingHistory();
+        if (history.isEmpty()) {
+            System.out.println("No recently browsed books.");
+            return;
+        }
+        System.out.println("=== Recently Browsed Books ===");
+        for (Book book : history) {
+            System.out.printf("%s by %s ($%.2f)%n", book.getTitle(), book.getAuthor(), book.getPrice());
+        }
+    }
+    private void viewAccountInfo() {
+        System.out.println("=== Account Info ===");
+        System.out.println("Username: " + currentUser.getUsername());
+        System.out.println("Full Name: " + currentUser.getFullName());
+        System.out.println("Email: " + currentUser.getEmail());
+        System.out.println("Account Created At: " + currentUser.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+
 }
+

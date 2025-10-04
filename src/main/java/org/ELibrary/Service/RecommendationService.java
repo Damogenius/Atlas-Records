@@ -37,11 +37,11 @@ public class RecommendationService {
         Map<String, AttributeValue> item = dynamoDb.getItem(request).item();
 
         if (item == null || item.isEmpty()) {
-            System.out.println("No recommendations found for user: " + username);
+            //System.out.println("No recommendations found for user: " + username);
             return recommendedBooks;
         }
 
-        // Assuming DynamoDB stores recommended book IDs as a Map<String, N> (bookId -> score/qty)
+
         Map<String, AttributeValue> recMap = item.get("recommendedBooks").m();
 
         for (String bookId : recMap.keySet()) {
