@@ -19,12 +19,12 @@ public class BookController {
 
     private final BookService bookService;
     private final CheckoutService checkoutService;
-    private final UserService userService;
+    UserService userService;
     private final RecommendationService recommendationService;
-    private final BrowsingHistoryService browsingHistoryService;
+    BrowsingHistoryService browsingHistoryService;
     private final Scanner scanner;
-    private final Map<String, User> users = new HashMap<>();
-    private User currentUser;
+    final Map<String, User> users = new HashMap<>();
+    User currentUser;
 
     public BookController(BookService bookService, CheckoutService checkoutService,
                           RecommendationService recommendationService,UserService userService,BrowsingHistoryService browsingHistoryService) {
@@ -158,7 +158,7 @@ public class BookController {
     }
 
     // ---------------- BOOK & CART ----------------
-    private void viewAllBooks() {
+    void viewAllBooks() {
         List<Book> books = bookService.getAllBooks();
         if (books.isEmpty()) {
             System.out.println("No books available.");
@@ -171,7 +171,7 @@ public class BookController {
                 b.getId(), b.getTitle(), b.getAuthor(), b.getPrice(), b.isIssued() ? "Issued" : "Available"));
     }
 
-    private void addNewBook() {
+    void addNewBook() {
         try {
             System.out.print("Enter book id: ");
             String id = scanner.nextLine();
@@ -192,7 +192,7 @@ public class BookController {
         }
     }
 
-    private void issueBook() {
+    void issueBook() {
         System.out.print("Enter book id to issue: ");
         String id = scanner.nextLine();
         try {
@@ -203,7 +203,7 @@ public class BookController {
         }
     }
 
-    private void returnBook() {
+    void returnBook() {
         System.out.print("Enter book id to return: ");
         String id = scanner.nextLine();
         try {
@@ -214,7 +214,7 @@ public class BookController {
         }
     }
 
-    private void addExistingBookToCart() {
+    void addExistingBookToCart() {
         System.out.println("Search by: 1) Book ID  2) Title  3) Author");
         String choice = scanner.nextLine();
         Book selectedBook = null;
@@ -298,7 +298,7 @@ public class BookController {
         System.out.printf("Total: $%.2f%n", cart.calculateTotal());
     }
 
-    private void removeFromCart() {
+    void removeFromCart() {
         Cart cart = currentUser.getCart();
         if (cart.isEmpty()) {
             System.out.println("Your cart is empty.");
@@ -327,7 +327,7 @@ public class BookController {
         }
     }
 
-    private void checkout() {
+    void checkout() {
         Cart cart = currentUser.getCart();
         if (cart.isEmpty()) {
             System.out.println("Cart is empty. Cannot checkout.");
@@ -343,7 +343,7 @@ public class BookController {
         }
     }
 
-    private void viewRecommendations() {
+    void viewRecommendations() {
         List<Book> recBooks = recommendationService.getRecommendations(currentUser.getUsername(), bookService);
         if (recBooks.isEmpty()) {
             System.out.println("No recommended books for you right now.");
@@ -371,7 +371,7 @@ public class BookController {
                 });
     }
 
-    private void viewBrowsingHistory() {
+    void viewBrowsingHistory() {
         List<Book> history = currentUser.getBrowsingHistory();
         if (history.isEmpty()) {
             System.out.println("No recently browsed books.");
