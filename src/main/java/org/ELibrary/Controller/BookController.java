@@ -150,7 +150,7 @@ public class BookController {
         }
     }
 
-    private void logoutUser() {
+    void logoutUser() {
         // Persist browsing history to DynamoDB
         browsingHistoryService.saveBrowsingHistory(currentUser.getUsername(), currentUser.getBrowsingHistory());
         currentUser = null;
@@ -283,7 +283,7 @@ public class BookController {
         return chosen;
     }
 
-    private void viewCart() {
+    void viewCart() {
         Cart cart = currentUser.getCart();
         if (cart.isEmpty()) {
             System.out.println("Cart is empty.");
@@ -382,13 +382,12 @@ public class BookController {
             System.out.printf("%s by %s ($%.2f)%n", book.getTitle(), book.getAuthor(), book.getPrice());
         }
     }
-    private void viewAccountInfo() {
+    void viewAccountInfo() {
         System.out.println("=== Account Info ===");
         System.out.println("Username: " + currentUser.getUsername());
         System.out.println("Full Name: " + currentUser.getFullName());
         System.out.println("Email: " + currentUser.getEmail());
         System.out.println("Account Created At: " + currentUser.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
-
 }
 
