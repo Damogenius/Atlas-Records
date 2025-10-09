@@ -67,39 +67,57 @@ public class BookController {
         }
     }
     private void registerUser() {
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine().trim();
+        String username;
+        String email;
+        String fullName;
+        String password;
 
-        System.out.print("Enter email: ");
-        String email = scanner.nextLine().trim();
-        if (!email.contains("@") || !email.contains(".")) {
-            System.out.println("Invalid email format. Email should contain '@' and domain (e.g., example@mail.com).");
-            return;
+        while (true) {
+            System.out.print("Enter username: ");
+            username = scanner.nextLine().trim();
+            if (username.isEmpty()) {
+                System.out.println(" Username cannot be empty.");
+            } else if (userService.getUser(username) != null) {
+                System.out.println("Username already exists. Please choose a different one.");
+            } else {
+                break;
+            }
         }
 
-        System.out.print("Enter full name: ");
-        String fullName = scanner.nextLine().trim();
-        if (!fullName.matches("^[A-Za-z ]+$")) {
-            System.out.println("Invalid name. Numbers or special characters are not allowed in the full name.");
-            return;
+        while (true) {
+            System.out.print("Enter email: ");
+            email = scanner.nextLine().trim();
+            if (!email.contains("@") || !email.contains(".")) {
+                System.out.println("Invalid email format. Email should contain '@' and a valid domain (e.g., example@mail.com).");
+            } else {
+                break;
+            }
         }
 
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine().trim();
-        if (password.length() < 6) {
-            System.out.println("Password must be at least 6 characters long.");
-            return;
+        while (true) {
+            System.out.print("Enter full name: ");
+            fullName = scanner.nextLine().trim();
+            if (!fullName.matches("^[A-Za-z ]+$")) {
+                System.out.println("Invalid name. Numbers or special characters are not allowed.");
+            } else {
+                break;
+            }
         }
 
-        if (userService.getUser(username) != null) {
-            System.out.println("Username already exists. Please choose a different one.");
-            return;
+        while (true) {
+            System.out.print("Enter password (min 6 chars): ");
+            password = scanner.nextLine().trim();
+            if (password.length() < 6) {
+                System.out.println("Password must be at least 6 characters long.");
+            } else {
+                break;
+            }
         }
 
         User user = new User(username, email, password, fullName);
         userService.saveUser(user);
         users.put(username, user);
-        System.out.println("User registered successfully!");
+        System.out.println(" User registered successfully!");
     }
 
 
