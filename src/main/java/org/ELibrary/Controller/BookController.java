@@ -10,8 +10,6 @@ import org.ELibrary.Service.UserService;
 import org.ELibrary.Service.RecommendationService;
 import org.ELibrary.Service.BrowsingHistoryService;
 
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import java.net.URI;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -151,36 +149,35 @@ public class BookController {
         System.out.println("Logged in as: " + currentUser.getUsername());
         System.out.println("1. View all books");
         System.out.println("2. Add new book");
-        System.out.println("3. Issue book");
-        System.out.println("4. Return book");
-        System.out.println("5. Add existing book to cart");
-        System.out.println("6. View cart");
-        System.out.println("7. Checkout");
-        System.out.println("8. Remove book from cart");
-        System.out.println("9. View my orders");
-        System.out.println("10. Recommended Books");
-        System.out.println("11. View Recently Browsed Books");
-        System.out.println("12. Logout");
-        System.out.println("13. View Account Info");
-        System.out.println("14. Exit");
+        System.out.println("3. Delete book");
+//        System.out.println("4. Return book");
+        System.out.println("4. Add existing book to cart");
+        System.out.println("5. View cart");
+        System.out.println("6. Checkout");
+        System.out.println("7. Remove book from cart");
+        System.out.println("8. View my orders");
+        System.out.println("9. Recommended Books");
+        System.out.println("10. View Recently Browsed Books");
+        System.out.println("11. Logout");
+        System.out.println("12. View Account Info");
+        System.out.println("13. Exit");
         System.out.print("Enter choice: ");
 
         String choice = scanner.nextLine();
         switch (choice) {
             case "1" -> viewAllBooks();
             case "2" -> addNewBook();
-            case "3" -> issueBook();
-            case "4" -> returnBook();
-            case "5" -> addExistingBookToCart();
-            case "6" -> viewCart();
-            case "7" -> checkout();
-            case "8" -> removeFromCart();
-            case "9" -> viewOrders();
-            case "10" -> viewRecommendations();
-            case "11" -> viewBrowsingHistory();
-            case "12" -> logoutUser();
-            case "13" -> viewAccountInfo();
-            case "14" -> {
+            case "3" -> deleteBook();
+            case "4" -> addExistingBookToCart();
+            case "5" -> viewCart();
+            case "6" -> checkout();
+            case "7" -> removeFromCart();
+            case "8" -> viewOrders();
+            case "9" -> viewRecommendations();
+            case "10" -> viewBrowsingHistory();
+            case "11" -> logoutUser();
+            case "12" -> viewAccountInfo();
+            case "13" -> {
                 System.out.println("Exiting Bookstore. Goodbye!");
                 System.exit(0);
             }
@@ -189,7 +186,6 @@ public class BookController {
     }
 
     void logoutUser() {
-        // Persist browsing history to DynamoDB
         browsingHistoryService.saveBrowsingHistory(currentUser.getUsername(), currentUser.getBrowsingHistory());
         currentUser = null;
         System.out.println("Logged out successfully.");
@@ -203,10 +199,10 @@ public class BookController {
             return;
         }
 
-        System.out.printf("%-5s %-25s %-20s %-10s %-10s%n", "ID", "Title", "Author", "Price", "Status");
+        System.out.printf("%-5s %-25s %-20s %-10s %n", "ID", "Title", "Author", "Price");
         System.out.println("--------------------------------------------------------------------");
-        books.forEach(b -> System.out.printf("%-5s %-25s %-20s $%-9.2f %-10s%n",
-                b.getId(), b.getTitle(), b.getAuthor(), b.getPrice(), b.isIssued() ? "Issued" : "Available"));
+        books.forEach(b -> System.out.printf("%-5s %-25s %-20s $%-9.2f %n",
+                b.getId(), b.getTitle(), b.getAuthor(), b.getPrice()));
     }
 
     void addNewBook() {
@@ -220,7 +216,7 @@ public class BookController {
             System.out.print("Enter price: ");
             double price = Double.parseDouble(scanner.nextLine());
 
-            Book book = new Book(id, title, author, price, false);
+            Book book = new Book(id, title, author, price);
             bookService.addBook(book);
             System.out.println("Book added successfully.");
         } catch (NumberFormatException e) {
@@ -240,6 +236,31 @@ public class BookController {
             System.out.println("Error issuing book: " + e.getMessage());
         }
     }
+    public void deleteBook() {
+        System.out.print("Enter Book ID to delete: ");
+        String bookId = scanner.nextLine();
+
+        Book book = bookService.getBookById(bookId);
+        if (book == null) {
+            System.out.println("Book not found with ID: " + bookId);
+            return;
+        }
+
+        System.out.print("Are you sure you want to delete \"" + book.getTitle() + "\"? (Y/N): ");
+        String confirm = scanner.nextLine().trim().toUpperCase();
+
+        if (confirm.equals("Y")) {
+            boolean deleted = bookService.deleteBook(bookId);
+            if (deleted) {
+                System.out.println("Book \"" + book.getTitle() + "\" deleted successfully.");
+            } else {
+                System.out.println("Failed to delete book.");
+            }
+        } else {
+            System.out.println("Delete operation cancelled.");
+        }
+    }
+
 
     void returnBook() {
         System.out.print("Enter book id to return: ");
@@ -306,8 +327,7 @@ public class BookController {
         System.out.println("Matching books:");
         for (int i = 0; i < matches.size(); i++) {
             Book b = matches.get(i);
-            System.out.printf("%d. %s by %s ($%.2f) - %s%n", i + 1, b.getTitle(), b.getAuthor(), b.getPrice(),
-                    b.isIssued() ? "Issued" : "Available");
+            System.out.printf("%d. %s by %s ($%.2f) %n", i + 1, b.getTitle(), b.getAuthor(), b.getPrice());
         }
 
         System.out.print("Choose book number: ");
@@ -388,10 +408,10 @@ public class BookController {
             return;
         }
 
-        System.out.printf("%-5s %-25s %-20s %-10s %-10s%n", "ID", "Title", "Author", "Price", "Status");
+        System.out.printf("%-5s %-25s %-20s %-10s %n", "ID", "Title", "Author", "Price");
         System.out.println("--------------------------------------------------------------------");
-        recBooks.forEach(b -> System.out.printf("%-5s %-25s %-20s $%-9.2f %-10s%n",
-                b.getId(), b.getTitle(), b.getAuthor(), b.getPrice(), b.isIssued() ? "Issued" : "Available"));
+        recBooks.forEach(b -> System.out.printf("%-5s %-25s %-20s $%-9.2f %n",
+                b.getId(), b.getTitle(), b.getAuthor(), b.getPrice()));
     }
 
     private void viewOrders() {

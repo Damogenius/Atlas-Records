@@ -9,7 +9,7 @@ public class Book {
     private double price;
     private boolean issued;
 
-    public Book(String id, String title, String author, double price, boolean issued) {
+    public Book(String id, String title, String author, double price) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -39,6 +39,6 @@ public class Book {
     @Override
     public String toString() {
         return String.format("[%s] %s by %s ($%.2f)%s",
-                id, title, author, price, issued ? " [Issued]" : "");
+                id, title, author, price);
     }
 }

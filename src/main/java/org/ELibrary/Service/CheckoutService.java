@@ -28,7 +28,7 @@ public class CheckoutService {
         }
 
         double total = cart.calculateTotal();
-        Order order = new Order(user.getUsername(), cart.getItems(), total, LocalDateTime.now());
+        Order order = new Order(user.getUsername(), new HashMap<>(cart.getItems()), total, LocalDateTime.now());
 
         persistOrder(order);
         user.addOrder(order);

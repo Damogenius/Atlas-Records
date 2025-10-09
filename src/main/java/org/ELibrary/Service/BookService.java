@@ -24,7 +24,7 @@ public class BookService {
             item.put("BookID", AttributeValue.builder().s(book.getId()).build());
             item.put("Title", AttributeValue.builder().s(book.getTitle()).build());
             item.put("Author", AttributeValue.builder().s(book.getAuthor()).build());
-            item.put("Issued", AttributeValue.builder().bool(book.isIssued()).build());
+//            item.put("Issued", AttributeValue.builder().bool(book.isIssued()).build());
             item.put("Price", AttributeValue.builder().n(String.valueOf(book.getPrice())).build());
             dynamoDb.putItem(PutItemRequest.builder().tableName(TABLE_NAME).item(item).build());
         } else {
@@ -139,7 +139,7 @@ public class BookService {
     }
 
     // Delete book
-    public void deleteBook(String id) {
+    public boolean deleteBook(String id) {
         if (useDynamo) {
             dynamoDb.deleteItem(DeleteItemRequest.builder()
                     .tableName(TABLE_NAME)
@@ -148,6 +148,7 @@ public class BookService {
         } else {
             inMemory.remove(id);
         }
+        return true;
     }
 
     // Map DynamoDB item to Book
@@ -155,8 +156,8 @@ public class BookService {
         String id = item.get("BookID").s();
         String title = item.get("Title").s();
         String author = item.get("Author").s();
-        boolean issued = item.get("Issued").bool();
+//        boolean issued = item.get("Issued").bool();
         double price = Double.parseDouble(item.get("Price").n());
-        return new Book(id, title, author, price, issued);
+        return new Book(id, title, author, price);
     }
 }

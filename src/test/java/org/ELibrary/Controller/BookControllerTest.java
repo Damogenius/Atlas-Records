@@ -39,7 +39,7 @@ class BookControllerTest {
 
     @Test
     void testAddNewBook() {
-        Book book = new Book("1", "Test Book", "Author1", 50.0, false);
+        Book book = new Book("1", "Test Book", "Author1", 50.0);
         when(bookService.getAllBooks()).thenReturn(Collections.singletonList(book));
 
         controller.viewAllBooks();
@@ -60,7 +60,7 @@ class BookControllerTest {
         User user = new User("john", "john@example.com", "pass123", "John Doe");
         controller.currentUser = user;
 
-        Book book = new Book("1", "ML Book", "Author", 30.0, false);
+        Book book = new Book("1", "ML Book", "Author", 30.0);
         user.addToBrowsingHistory(book);
 
         List<Book> history = user.getBrowsingHistory();
@@ -83,7 +83,7 @@ class BookControllerTest {
         User user = new User("john", "john@example.com", "pass123", "John Doe");
         controller.currentUser = user;
 
-        Book recommendedBook = new Book("99", "Recommended Book", "AI Engine", 99.0, false);
+        Book recommendedBook = new Book("99", "Recommended Book", "AI Engine", 99.0);
         when(recommendationService.getRecommendations(anyString(), any(BookService.class)))
                 .thenReturn(Collections.singletonList(recommendedBook));
 
@@ -96,7 +96,7 @@ class BookControllerTest {
     @Test
     void testCheckoutServiceCalled() {
         User user = new User("john", "john@example.com", "pass123", "John Doe");
-        Book book = new Book("1", "Test Book", "Author1", 50.0, false);
+        Book book = new Book("1", "Test Book", "Author1", 50.0);
         user.getCart().addBook(book, 1);
         controller.currentUser = user;
 
@@ -115,8 +115,8 @@ class BookControllerTest {
         controller.currentUser = user;
 
         List<Book> books = Arrays.asList(
-                new Book("1", "Book A", "Author1", 12.0, false),
-                new Book("2", "Book B", "Author2", 20.0, false)
+                new Book("1", "Book A", "Author1", 12.0),
+                new Book("2", "Book B", "Author2", 20.0)
         );
 
         user.setBrowsingHistory(books);
