@@ -66,22 +66,42 @@ public class BookController {
             default -> System.out.println("Invalid choice. Try again.");
         }
     }
-
     private void registerUser() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine().trim();
+
         System.out.print("Enter email: ");
         String email = scanner.nextLine().trim();
+        if (!email.contains("@") || !email.contains(".")) {
+            System.out.println("Invalid email format. Email should contain '@' and domain (e.g., example@mail.com).");
+            return;
+        }
+
         System.out.print("Enter full name: ");
         String fullName = scanner.nextLine().trim();
+        if (!fullName.matches("^[A-Za-z ]+$")) {
+            System.out.println("Invalid name. Numbers or special characters are not allowed in the full name.");
+            return;
+        }
+
         System.out.print("Enter password: ");
         String password = scanner.nextLine().trim();
+        if (password.length() < 6) {
+            System.out.println("Password must be at least 6 characters long.");
+            return;
+        }
+
+        if (userService.getUser(username) != null) {
+            System.out.println("Username already exists. Please choose a different one.");
+            return;
+        }
 
         User user = new User(username, email, password, fullName);
         userService.saveUser(user);
         users.put(username, user);
         System.out.println("User registered successfully!");
     }
+
 
     private void loginUser() {
         System.out.print("Enter username: ");

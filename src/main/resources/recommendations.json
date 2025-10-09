@@ -1,0 +1,20 @@
+{
+  "Recommendations": [
+    {
+      "PutRequest": {
+        "Item": {
+          "username": { "S": "damokt" },
+          "recommendedBooks": {
+            "M": {
+              "1": { "S": "Clean Code" },
+              "2": { "S": "Effective Java" },
+              "3": { "S": "Design Patterns" },
+              "4": { "S": "Refactoring" },
+              "5": { "S": "The Pragmatic Programmer" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
