@@ -103,40 +103,40 @@ public class BookService {
         }
     }
 
-    public void issueBook(String id) {
-        Book b = getBookById(id);
-        if (b == null) throw new IllegalArgumentException("Book not found: " + id);
-        if (b.isIssued()) throw new IllegalStateException("Book is already issued: " + id);
+//    public void issueBook(String id) {
+//        Book b = getBookById(id);
+//        if (b == null) throw new IllegalArgumentException("Book not found: " + id);
+//        if (b.isIssued()) throw new IllegalStateException("Book is already issued: " + id);
+//
+//        if (useDynamo) {
+//            dynamoDb.updateItem(UpdateItemRequest.builder()
+//                    .tableName(TABLE_NAME)
+//                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
+//                    .updateExpression("SET Issued = :val")
+//                    .expressionAttributeValues(Map.of(":val", AttributeValue.builder().bool(true).build()))
+//                    .build());
+//        } else {
+//            b.setIssued(true);
+//            inMemory.put(id, b);
+//        }
+//    }
 
-        if (useDynamo) {
-            dynamoDb.updateItem(UpdateItemRequest.builder()
-                    .tableName(TABLE_NAME)
-                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
-                    .updateExpression("SET Issued = :val")
-                    .expressionAttributeValues(Map.of(":val", AttributeValue.builder().bool(true).build()))
-                    .build());
-        } else {
-            b.setIssued(true);
-            inMemory.put(id, b);
-        }
-    }
-
-    public void returnBook(String id) {
-        Book b = getBookById(id);
-        if (b == null) throw new IllegalArgumentException("Book not found: " + id);
-
-        if (useDynamo) {
-            dynamoDb.updateItem(UpdateItemRequest.builder()
-                    .tableName(TABLE_NAME)
-                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
-                    .updateExpression("SET Issued = :val")
-                    .expressionAttributeValues(Map.of(":val", AttributeValue.builder().bool(false).build()))
-                    .build());
-        } else {
-            b.setIssued(false);
-            inMemory.put(id, b);
-        }
-    }
+//    public void returnBook(String id) {
+//        Book b = getBookById(id);
+//        if (b == null) throw new IllegalArgumentException("Book not found: " + id);
+//
+//        if (useDynamo) {
+//            dynamoDb.updateItem(UpdateItemRequest.builder()
+//                    .tableName(TABLE_NAME)
+//                    .key(Map.of("BookID", AttributeValue.builder().s(id).build()))
+//                    .updateExpression("SET Issued = :val")
+//                    .expressionAttributeValues(Map.of(":val", AttributeValue.builder().bool(false).build()))
+//                    .build());
+//        } else {
+//            b.setIssued(false);
+//            inMemory.put(id, b);
+//        }
+//    }
 
     // Delete book
     public boolean deleteBook(String id) {

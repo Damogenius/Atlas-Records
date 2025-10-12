@@ -226,16 +226,16 @@ public class BookController {
         }
     }
 
-    void issueBook() {
-        System.out.print("Enter book id to issue: ");
-        String id = scanner.nextLine();
-        try {
-            bookService.issueBook(id);
-            System.out.println("Book issued successfully.");
-        } catch (Exception e) {
-            System.out.println("Error issuing book: " + e.getMessage());
-        }
-    }
+//    void issueBook() {
+//        System.out.print("Enter book id to issue: ");
+//        String id = scanner.nextLine();
+//        try {
+//            bookService.issueBook(id);
+//            System.out.println("Book issued successfully.");
+//        } catch (Exception e) {
+//            System.out.println("Error issuing book: " + e.getMessage());
+//        }
+//    }
     public void deleteBook() {
         System.out.print("Enter Book ID to delete: ");
         String bookId = scanner.nextLine();
@@ -262,16 +262,16 @@ public class BookController {
     }
 
 
-    void returnBook() {
-        System.out.print("Enter book id to return: ");
-        String id = scanner.nextLine();
-        try {
-            bookService.returnBook(id);
-            System.out.println("Book returned successfully.");
-        } catch (Exception e) {
-            System.out.println("Error returning book: " + e.getMessage());
-        }
-    }
+//    void returnBook() {
+//        System.out.print("Enter book id to return: ");
+//        String id = scanner.nextLine();
+//        try {
+//            bookService.returnBook(id);
+//            System.out.println("Book returned successfully.");
+//        } catch (Exception e) {
+//            System.out.println("Error returning book: " + e.getMessage());
+//        }
+//    }
 
     void addExistingBookToCart() {
         System.out.println("Search by: 1) Book ID  2) Title  3) Author");
@@ -311,6 +311,7 @@ public class BookController {
                 }
                 currentUser.getCart().addBook(selectedBook, qty);
                 currentUser.addToBrowsingHistory(selectedBook);
+                browsingHistoryService.saveBrowsingHistory(currentUser.getUsername(), currentUser.getBrowsingHistory());
                 System.out.println(selectedBook.getTitle() + " added to cart.");
             }
         } catch (NumberFormatException e) {
@@ -338,6 +339,7 @@ public class BookController {
         }
         Book chosen = matches.get(idx);
         currentUser.addToBrowsingHistory(chosen);
+        browsingHistoryService.saveBrowsingHistory(currentUser.getUsername(), currentUser.getBrowsingHistory());
         return chosen;
     }
 

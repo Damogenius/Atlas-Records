@@ -4,7 +4,7 @@ import org.ELibrary.Model.Book;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,16 +25,16 @@ public class BrowsingHistoryService {
 
         List<String> bookIds = history.stream().map(Book::getId).collect(Collectors.toList());
 
-        Map<String, AttributeValue> item = new HashMap<>();
-        item.put("username", AttributeValue.builder().s(username).build());
-        item.put(HISTORY_ATTR, AttributeValue.builder().ss(bookIds).build());
+        Map<String, AttributeValue> key = Map.of("username", AttributeValue.builder().s(username).build());
 
-        PutItemRequest request = PutItemRequest.builder()
+        UpdateItemRequest request = UpdateItemRequest.builder()
                 .tableName(TABLE_NAME)
-                .item(item)
+                .key(key)
+                .updateExpression("SET browsingHistory = :history")
+                .expressionAttributeValues(Map.of(":history", AttributeValue.builder().ss(bookIds).build()))
                 .build();
 
-        dynamoDb.putItem(request);
+        dynamoDb.updateItem(request);
     }
 
     // Load browsing history from DynamoDB

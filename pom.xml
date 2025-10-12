@@ -18,7 +18,7 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>dynamodb</artifactId>
-            <version>2.25.36</version> <!-- latest as of Sept 2025 -->
+            <version>2.25.36</version>
         </dependency>
         <!-- SLF4J API -->
         <dependency>
@@ -27,20 +27,18 @@
             <version>2.0.9</version>
         </dependency>
 
-        <!-- Simple implementation -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.9</version>
         </dependency>
-        <!-- AWS SDK Core (optional but good to have) -->
+
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>auth</artifactId>
             <version>2.25.36</version>
         </dependency>
 
-        <!-- (Optional) Jackson Databind for JSON mapping -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -76,7 +74,6 @@
 
     <build>
         <plugins>
-            <!-- Compiler plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -87,7 +84,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Surefire for running JUnit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

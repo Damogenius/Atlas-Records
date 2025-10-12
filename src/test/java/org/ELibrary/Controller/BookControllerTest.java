@@ -36,6 +36,24 @@ class BookControllerTest {
 
         controller = new BookController(bookService, checkoutService, recommendationService, userService, browsingHistoryService);
     }
+    @Test
+    void testViewAllBooksEmpty() {
+        when(bookService.getAllBooks()).thenReturn(Collections.emptyList());
+        controller.viewAllBooks();
+        verify(bookService, times(1)).getAllBooks();
+    }
+    @Test
+    void testDeleteBook() {
+        Book book = new Book("10", "Delete Me", "Author", 25.0);
+        when(bookService.getBookById("10")).thenReturn(book);
+        when(bookService.deleteBook("10")).thenReturn(true);
+
+        boolean result = bookService.deleteBook("10");
+        assertTrue(result);
+        verify(bookService, times(1)).deleteBook("10");
+    }
+
+
 
     @Test
     void testAddNewBook() {
@@ -48,7 +66,7 @@ class BookControllerTest {
 
     @Test
     void testViewBrowsingHistoryEmpty() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("Damo", "xyz@example.com", "pass123", "Damo K");
         controller.currentUser = user;
 
         controller.viewBrowsingHistory();
@@ -57,7 +75,7 @@ class BookControllerTest {
 
     @Test
     void testAddToBrowsingHistory() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("Damo", "xyz@example.com", "pass123", "Damo K");
         controller.currentUser = user;
 
         Book book = new Book("1", "ML Book", "Author", 30.0);
@@ -70,7 +88,7 @@ class BookControllerTest {
 
     @Test
     void testLogoutUser() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("Damo", "xyz@example.com", "pass123", "Damo K");
         controller.currentUser = user;
 
         controller.logoutUser();
@@ -80,10 +98,10 @@ class BookControllerTest {
 
     @Test
     void testRecommendationFetch() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("Damo", "xyz@example.com", "pass123", "Damo K");
         controller.currentUser = user;
 
-        Book recommendedBook = new Book("99", "Recommended Book", "AI Engine", 99.0);
+        Book recommendedBook = new Book("99", "Recommended Book", "Test Book", 99.0);
         when(recommendationService.getRecommendations(anyString(), any(BookService.class)))
                 .thenReturn(Collections.singletonList(recommendedBook));
 
@@ -95,7 +113,7 @@ class BookControllerTest {
 
     @Test
     void testCheckoutServiceCalled() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("Damo", "xyz@example.com", "pass123", "Damo K");
         Book book = new Book("1", "Test Book", "Author1", 50.0);
         user.getCart().addBook(book, 1);
         controller.currentUser = user;
@@ -111,7 +129,7 @@ class BookControllerTest {
 
     @Test
     void testSetAndGetBrowsingHistory() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("Damo", "xyz@example.com", "pass123", "Damo K");
         controller.currentUser = user;
 
         List<Book> books = Arrays.asList(
@@ -124,32 +142,42 @@ class BookControllerTest {
         assertEquals(2, history.size());
         assertEquals("Book A", history.get(0).getTitle());
     }
+    @Test
+    void testCheckoutWithEmptyCart() {
+        User user = new User("emptyUser", "e@x.com", "pass", "Empty User");
+        controller.currentUser = user;
+        when(checkoutService.checkout(user)).thenReturn(null);
+
+        Order result = checkoutService.checkout(user);
+        assertNull(result);
+    }
+
 
     @Test
     void testViewAccountInfo() {
-        User user = new User("john", "john@example.com", "pass123", "John Doe");
+        User user = new User("damo", "xyz@example.com", "pass123", "Damo K");
         controller.currentUser = user;
 
         controller.viewAccountInfo();
-        assertEquals("john", user.getUsername());
-        assertEquals("John Doe", user.getFullName());
+        assertEquals("damo", user.getUsername());
+        assertEquals("Damo K", user.getFullName());
     }
 
     @Test
     void testUserRegistration() {
-        User user = new User("alice", "alice@example.com", "pass123", "Alice");
-        when(userService.getUser("alice")).thenReturn(user);
+        User user = new User("damo", "xyz@example.com", "pass123", "Damo K");
+        when(userService.getUser("damo")).thenReturn(user);
 
         controller.users.put(user.getUsername(), user);
-        assertTrue(controller.users.containsKey("alice"));
+        assertTrue(controller.users.containsKey("damo"));
     }
 
     @Test
     void testUserLogin() {
-        User user = new User("bob", "bob@example.com", "pass123", "Bob");
-        when(userService.getUser("bob")).thenReturn(user);
+        User user = new User("damo", "xyz@example.com", "pass123", "Bob");
+        when(userService.getUser("damo")).thenReturn(user);
 
         controller.currentUser = user;
-        assertEquals("bob", controller.currentUser.getUsername());
+        assertEquals("damo", controller.currentUser.getUsername());
     }
 }
