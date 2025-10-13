@@ -45,7 +45,7 @@ public class RecommendationService {
         Map<String, AttributeValue> recMap = item.get("recommendedBooks").m();
 
         for (AttributeValue value : recMap.values()) {
-            String title = value.s();  // Get the actual book title
+            String title = value.s();
             List<Book> books = bookService.getBooksByTitle(title);
             if (books != null && !books.isEmpty()) {
                 recommendedBooks.add(books.get(0));
